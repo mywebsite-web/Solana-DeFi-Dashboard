@@ -1,0 +1,45 @@
+/* components/StatsBar/StatsBar.module.css */
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  padding: 14px 24px;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--glass-border);
+  overflow-x: auto;
+}
+
+.stat {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 24px;
+  border-right: 1px solid var(--glass-border);
+  white-space: nowrap;
+}
+
+.stat:last-child { border-right: none; }
+
+.label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.value {
+  font-size: 13px;
+  font-weight: 700;
+  font-family: var(--font-mono);
+}
+
+.accent_primary { color: var(--accent-primary); }
+.accent_secondary { color: var(--accent-secondary); }
+.accent_warning { color: var(--accent-warning); }
+
+@media (max-width: 640px) {
+  .stat { padding: 0 16px; }
+  .bar { justify-content: flex-start; }
+}

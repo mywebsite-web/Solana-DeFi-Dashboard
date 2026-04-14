@@ -1,0 +1,397 @@
+/* components/LiquidityPanel/LiquidityPanel.module.css */
+.panel {
+  background: var(--glass-light);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-shadow: var(--shadow-card), var(--shadow-inset);
+  animation: fadeInUp 0.5s ease 0.1s both;
+  position: relative;
+}
+
+.panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-xl);
+  background: radial-gradient(ellipse at 50% 0%, rgba(124, 92, 252, 0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.panelHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.meteoraBadge {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  background: var(--accent-secondary-dim);
+  border: 1px solid rgba(124, 92, 252, 0.25);
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent-secondary);
+  letter-spacing: 0.5px;
+}
+
+.panelTitle {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.5px;
+}
+
+.refreshBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  background: var(--glass-medium);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: all 0.2s;
+}
+
+.refreshBtn:hover {
+  border-color: var(--accent-secondary);
+  color: var(--accent-secondary);
+}
+
+.spinning {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sectionTitle {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.poolCount {
+  font-size: 11px;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  padding: 3px 8px;
+  background: var(--glass-medium);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-full);
+}
+
+.skeletonList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.poolSkeleton {
+  height: 120px;
+  border-radius: var(--radius-lg);
+}
+
+.poolList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 380px;
+  overflow-y: auto;
+  padding-right: 2px;
+}
+
+/* Add liquidity section */
+.addLiquiditySection {
+  border-top: 1px solid var(--glass-border);
+  padding-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.selectedPoolName {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent-secondary);
+  font-family: var(--font-mono);
+}
+
+.aprBanner {
+  display: flex;
+  align-items: center;
+  padding: 14px 16px;
+  background: var(--accent-secondary-dim);
+  border: 1px solid rgba(124, 92, 252, 0.2);
+  border-radius: var(--radius-md);
+  gap: 0;
+}
+
+.aprItem {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  align-items: center;
+}
+
+.aprDivider {
+  width: 1px;
+  height: 32px;
+  background: rgba(124, 92, 252, 0.2);
+}
+
+.aprLabel {
+  font-size: 10px;
+  font-weight: 600;
+  color: rgba(124, 92, 252, 0.7);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.aprValue {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--accent-secondary);
+  font-family: var(--font-mono);
+}
+
+/* Input pair */
+.inputPair {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.liquidityInput {
+  flex: 1;
+  background: var(--bg-elevated);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  transition: border-color 0.2s;
+}
+
+.liquidityInput:focus-within {
+  border-color: rgba(124, 92, 252, 0.4);
+  box-shadow: 0 0 0 3px rgba(124, 92, 252, 0.06);
+}
+
+.liquidityInputHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.liquidityTokenTag {
+  padding: 3px 8px;
+  background: var(--accent-primary-dim);
+  border: 1px solid rgba(0, 212, 170, 0.25);
+  border-radius: var(--radius-full);
+}
+
+.liquidityTokenTagY {
+  background: var(--accent-secondary-dim) !important;
+  border-color: rgba(124, 92, 252, 0.25) !important;
+}
+
+.liquidityTokenSymbol {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--accent-primary);
+  letter-spacing: 0.5px;
+}
+
+.liquidityTokenTagY .liquidityTokenSymbol {
+  color: var(--accent-secondary);
+}
+
+.inputLabel {
+  font-size: 10px;
+  color: var(--text-muted);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.liquidityAmountInput {
+  width: 100%;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-primary);
+  caret-color: var(--accent-secondary);
+  letter-spacing: -0.5px;
+}
+
+.liquidityAmountInput::placeholder { color: var(--text-muted); }
+
+.plusIcon {
+  font-size: 20px;
+  font-weight: 300;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+/* Share preview */
+.sharePreview {
+  padding: 12px 14px;
+  background: var(--bg-surface);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  animation: fadeIn 0.2s ease;
+}
+
+.shareRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.shareLabel {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.shareValue {
+  font-size: 13px;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  color: var(--accent-secondary);
+}
+
+.shareBar {
+  height: 4px;
+  background: var(--bg-overlay);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.shareBarFill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-secondary), var(--accent-primary));
+  border-radius: var(--radius-full);
+  transition: width 0.4s ease;
+  min-width: 4px;
+}
+
+/* Add CTA */
+.addCta {
+  width: 100%;
+  padding: 16px;
+  border-radius: var(--radius-lg);
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: linear-gradient(135deg, var(--accent-secondary) 0%, #5a3fd4 50%, #9c7cff 100%);
+  color: #fff;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.addCta::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.1) 50%, transparent 100%);
+  transform: translateX(-100%);
+  transition: transform 0.5s ease;
+}
+
+.addCta:hover:not(.addCtaDisabled)::before {
+  transform: translateX(100%);
+}
+
+.addCta:hover:not(.addCtaDisabled) {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-glow-violet);
+}
+
+.addCtaDisabled {
+  background: var(--bg-elevated) !important;
+  color: var(--text-muted) !important;
+  cursor: not-allowed;
+}
+
+.ctaSpinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+/* Empty state */
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 24px;
+  border-top: 1px solid var(--glass-border);
+}
+
+.emptyIcon {
+  font-size: 28px;
+  color: var(--text-muted);
+  opacity: 0.5;
+}
+
+.emptyText {
+  font-size: 13px;
+  color: var(--text-muted);
+  text-align: center;
+}

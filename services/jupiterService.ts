@@ -1,7 +1,15 @@
 // services/jupiterService.ts
 import { Connection, VersionedTransaction } from "@solana/web3.js";
 import { SwapQuote } from "@/types";
-import { JUPITER_API_BASE, SOLANA_RPC_ENDPOINT } from "@/utils/constants";
+import { SOLANA_RPC_ENDPOINT } from "@/utils/constants";
+
+// Get the app URL - use environment variable or derive from window.location
+function getAppUrl(): string {
+  if (typeof window !== "undefined") {
+    return window.location.origin;
+  }
+  return process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+}
 
 export async function getSwapQuote(
   inputMint: string,
@@ -9,13 +17,12 @@ export async function getSwapQuote(
   amount: number,
   slippageBps: number = 50
 ): Promise<SwapQuote> {
-  const url = new URL(`${JUPITER_API_BASE}/quote`);
+  const appUrl = getAppUrl();
+  const url = new URL(`${appUrl}/api/jupiter/quote`);
   url.searchParams.set("inputMint", inputMint);
   url.searchParams.set("outputMint", outputMint);
   url.searchParams.set("amount", amount.toString());
   url.searchParams.set("slippageBps", slippageBps.toString());
-  url.searchParams.set("onlyDirectRoutes", "false");
-  url.searchParams.set("asLegacyTransaction", "false");
 
   try {
     const controller = new AbortController();
@@ -25,11 +32,11 @@ export async function getSwapQuote(
       const response = await fetch(url.toString(), { signal: controller.signal });
 
       if (!response.ok) {
-      const error = await response.text();
-      throw new Error(`Jupiter quote error: ${response.status} - ${error}`);
-    }
+        const error = await response.text();
+        throw new Error(`Quote error: ${response.status} - ${error}`);
+      }
 
-    return response.json();
+      return response.json();
     } finally {
       clearTimeout(timeoutId);
     }
@@ -44,12 +51,14 @@ export async function buildSwapTransaction(
   quoteResponse: SwapQuote,
   userPublicKey: string
 ): Promise<VersionedTransaction> {
+  const appUrl = getAppUrl();
+
   try {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 10000);
 
     try {
-      const response = await fetch(`${JUPITER_API_BASE}/swap`, {
+      const response = await fetch(`${appUrl}/api/jupiter/swap`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -64,7 +73,7 @@ export async function buildSwapTransaction(
 
       if (!response.ok) {
         const error = await response.text();
-        throw new Error(`Jupiter swap build error: ${response.status} - ${error}`);
+        throw new Error(`Swap build error: ${response.status} - ${error}`);
       }
 
       const { swapTransaction } = await response.json();

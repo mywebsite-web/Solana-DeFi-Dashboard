@@ -24,7 +24,8 @@ export default async function handler(
     const body = req.body;
 
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 10000);
+    // Swap building can be slow - use 30 second timeout
+    const timeoutId = setTimeout(() => controller.abort(), 30000);
 
     try {
       // Try direct call first
@@ -75,6 +76,18 @@ export default async function handler(
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
     console.error("Proxy swap error:", errorMessage);
-    res.status(500).json({ error: "Failed to build swap", details: errorMessage });
+    
+    // Detect if it's a network/DNS issue
+    const isNetworkError = 
+      errorMessage.includes("Failed to fetch") ||
+      errorMessage.includes("CORS") ||
+      errorMessage.includes("proxies failed") ||
+      errorMessage.includes("AbortError");
+    
+    const message = isNetworkError 
+      ? "Cannot reach Jupiter API - your network may be blocking access. Try: 1) Different WiFi, 2) Mobile hotspot, or 3) Contact ISP to whitelist quote-api.jup.ag"
+      : "Failed to build swap transaction";
+    
+    res.status(500).json({ error: message, details: errorMessage });
   }
 }

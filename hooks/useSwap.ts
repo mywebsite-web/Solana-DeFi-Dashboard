@@ -3,7 +3,7 @@ import { useState, useCallback, useRef } from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { VersionedTransaction } from "@solana/web3.js";
 import { Token, SwapQuote, TransactionState } from "@/types";
-import { getSwapQuote, executeSwap } from "@/services/jupiterService";
+import { getSwapQuote, executeSwap } from "@/services/swapRouterService";
 import { parseTokenAmount } from "@/utils/format";
 import { DEFAULT_SLIPPAGE } from "@/utils/constants";
 

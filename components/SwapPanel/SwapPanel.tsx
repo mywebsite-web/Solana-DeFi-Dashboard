@@ -199,7 +199,7 @@ export function SwapPanel() {
             <span className={styles.quoteLabel}>Slippage</span>
             <span className={styles.quoteValue}>{slippage}%</span>
           </div>
-          {quote.routePlan.length > 0 && (
+          {quote?.routePlan && quote.routePlan.length > 0 && (
             <div className={styles.quoteRow}>
               <span className={styles.quoteLabel}>Route</span>
               <span className={styles.quoteValue}>

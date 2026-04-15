@@ -27,11 +27,37 @@ export default async function handler(
     const timeoutId = setTimeout(() => controller.abort(), 10000);
 
     try {
-      const response = await fetch("https://quote-api.jup.ag/v6/swap", {
+      // Try direct call first
+      let response = await fetch("https://quote-api.jup.ag/v6/swap", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
         signal: controller.signal,
+      }).catch(async () => {
+        // If direct call fails, try different CORS proxies
+        console.warn("Direct Jupiter swap call failed, trying CORS proxies...");
+        
+        const swapUrl = "https://quote-api.jup.ag/v6/swap";
+        const proxies = [
+          `https://corsproxy.io/?${swapUrl}`,
+          `https://api.allorigins.win/raw?url=${encodeURIComponent(swapUrl)}`,
+        ];
+        
+        for (const proxy of proxies) {
+          try {
+            const proxyResponse = await fetch(proxy, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(body),
+              signal: controller.signal,
+            });
+            if (proxyResponse.ok) return proxyResponse;
+          } catch (e) {
+            console.warn(`Proxy ${proxy} failed, trying next...`);
+          }
+        }
+        
+        throw new Error("All CORS proxies failed");
       });
 
       if (!response.ok) {

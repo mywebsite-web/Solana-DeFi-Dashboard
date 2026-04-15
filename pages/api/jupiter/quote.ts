@@ -36,8 +36,28 @@ export default async function handler(
     const timeoutId = setTimeout(() => controller.abort(), 10000);
 
     try {
-      const response = await fetch(jupiterUrl.toString(), {
+      // Try direct call first
+      let response = await fetch(jupiterUrl.toString(), {
         signal: controller.signal,
+      }).catch(async () => {
+        // If direct call fails, try different CORS proxies
+        console.warn("Direct Jupiter call failed, trying CORS proxies...");
+        
+        const proxies = [
+          `https://corsproxy.io/?${jupiterUrl.toString()}`,
+          `https://api.allorigins.win/raw?url=${encodeURIComponent(jupiterUrl.toString())}`,
+        ];
+        
+        for (const proxy of proxies) {
+          try {
+            const proxyResponse = await fetch(proxy, { signal: controller.signal });
+            if (proxyResponse.ok) return proxyResponse;
+          } catch (e) {
+            console.warn(`Proxy ${proxy} failed, trying next...`);
+          }
+        }
+        
+        throw new Error("All CORS proxies failed");
       });
 
       if (!response.ok) {
